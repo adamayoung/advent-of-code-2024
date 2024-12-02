@@ -10,25 +10,17 @@ import Foundation
 final class ReportDataset: Sendable {
 
     var safeReportsCount: Int {
-        calculateSafeReportsCount()
+        reports.count(where: \.isSafe)
+    }
+
+    var safeReportsWithProblemDampenerCount: Int {
+        reports.count(where: \.isSafeWithProblemDampener)
     }
 
     let reports: [Report]
 
     init(reports: [Report]) {
         self.reports = reports
-    }
-
-    private func calculateSafeReportsCount() -> Int {
-        let safeCount = reports.reduce(0) { safeCount, report in
-            guard report.isSafe else {
-                return safeCount
-            }
-
-            return safeCount + 1
-        }
-
-        return safeCount
     }
 
 }

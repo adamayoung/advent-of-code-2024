@@ -20,8 +20,10 @@ struct Day2 {
 
         let datset = try await ReportDataset(fileURL: inputFileURL)
         let safeReportsCount = datset.safeReportsCount
+        let safeReportsWithProblemDampenerCount = datset.safeReportsWithProblemDampenerCount
 
         print("Number of Safe reports: \(safeReportsCount)")
+        print("Number of Safe reports with problem dampener: \(safeReportsWithProblemDampenerCount)")
     }
 
 }
