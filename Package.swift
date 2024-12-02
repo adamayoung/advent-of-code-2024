@@ -5,20 +5,15 @@ import PackageDescription
 
 let package = Package(
     name: "advent-of-code-2024",
+
+    platforms: [.macOS(.v14)],
+
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "advent-of-code-2024",
-            targets: ["advent-of-code-2024"]),
+        .executable(name: "Day1", targets: ["Day1"])
     ],
+
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "advent-of-code-2024"),
-        .testTarget(
-            name: "advent-of-code-2024Tests",
-            dependencies: ["advent-of-code-2024"]
-        ),
+        .executableTarget(name: "Day1", resources: [.process("Resources")]),
+        .testTarget(name: "Day1Tests", dependencies: ["Day1"])
     ]
 )
