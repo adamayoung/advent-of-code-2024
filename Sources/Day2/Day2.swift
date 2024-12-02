@@ -14,7 +14,8 @@ import Foundation
 struct Day2 {
 
     static func main() async throws {
-        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt") else {
+        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
+        else {
             fatalError("input file missing")
         }
 
@@ -23,7 +24,8 @@ struct Day2 {
         let safeReportsWithProblemDampenerCount = datset.safeReportsWithProblemDampenerCount
 
         print("Number of Safe reports: \(safeReportsCount)")
-        print("Number of Safe reports with problem dampener: \(safeReportsWithProblemDampenerCount)")
+        print(
+            "Number of Safe reports with problem dampener: \(safeReportsWithProblemDampenerCount)")
     }
 
 }

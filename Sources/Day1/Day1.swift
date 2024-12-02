@@ -14,7 +14,8 @@ import Foundation
 struct Day1 {
 
     static func main() async throws {
-        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt") else {
+        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
+        else {
             fatalError("input file missing")
         }
 

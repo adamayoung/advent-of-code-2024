@@ -41,11 +41,11 @@ final class LocationDataset: Sendable {
     }
 
     private func calculateSimilarityScore() -> Int {
-        var location2Counts = [Int: Int]()
+        var location2Counts: [Int: Int] = [:]
         for location2 in locations2 {
             location2Counts[location2, default: 0] += 1
         }
-        
+
         var score = 0
         for location1 in locations1 {
             let numberOfOccurrences = location2Counts[location1, default: 0]
@@ -68,8 +68,8 @@ extension LocationDataset {
             try? handle.close()
         }
 
-        var locations1 = [Int]()
-        var locations2 = [Int]()
+        var locations1: [Int] = []
+        var locations2: [Int] = []
 
         for try await line in handle.bytes.lines {
             let ids = line.split(separator: "   ")

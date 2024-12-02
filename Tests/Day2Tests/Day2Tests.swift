@@ -6,6 +6,7 @@
 //
 
 import Testing
+
 @testable import Day2
 
 @Suite

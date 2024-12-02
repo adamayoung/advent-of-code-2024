@@ -36,7 +36,7 @@ extension ReportDataset {
             try? handle.close()
         }
 
-        var reports = [Report]()
+        var reports: [Report] = []
         for try await line in handle.bytes.lines {
             let levelStrings = line.split(separator: " ")
             let levels = levelStrings.compactMap { Int($0) }
