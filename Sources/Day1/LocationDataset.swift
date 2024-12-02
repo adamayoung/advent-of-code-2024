@@ -16,6 +16,10 @@ final class LocationDataset: Sendable {
         calculateTotalDistnace()
     }
 
+    var similarityScore: Int {
+        calculateSimilarityScore()
+    }
+
     init(locations1: [Int], locations2: [Int]) {
         self.locations1 = locations1
         self.locations2 = locations2
@@ -34,6 +38,21 @@ final class LocationDataset: Sendable {
         }
 
         return totalDistance
+    }
+
+    private func calculateSimilarityScore() -> Int {
+        var location2Counts = [Int: Int]()
+        for location2 in locations2 {
+            location2Counts[location2, default: 0] += 1
+        }
+        
+        var score = 0
+        for location1 in locations1 {
+            let numberOfOccurrences = location2Counts[location1, default: 0]
+            score += location1 * numberOfOccurrences
+        }
+
+        return score
     }
 
 }

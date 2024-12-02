@@ -20,8 +20,10 @@ struct Day1 {
 
         let dataset = try await LocationDataset(fileURL: inputFileURL)
         let totalDistance = dataset.totalDistance
+        let similarityScore = dataset.similarityScore
 
         print("Total distance: \(totalDistance)")
+        print("Similarity score: \(similarityScore)")
     }
 
 }

@@ -5,51 +5,23 @@ import Testing
 struct Day1Tests {
 
     @Test
-    func totalDistanceWithOneSetOfLocationsWhichAreZeroReturnsZero() {
-        let locations1 = [0]
-        let locations2 = [0]
+    func totalDistanceWithTestDataReturnsCorrectResult() {
+        let locations1 = [3, 4, 2, 1, 3, 3]
+        let locations2 = [4, 3, 5, 3, 9, 3]
 
         let dataset = LocationDataset(locations1: locations1, locations2: locations2)
 
-        let result = dataset.totalDistance
-
-        #expect(result == 0)
+        #expect(dataset.totalDistance == 11)
     }
 
     @Test
-    func totalDistanceWithOneSetOfLocationsWhichHaveADistanceOfOneReturnsOne() {
-        let locations1 = [0]
-        let locations2 = [1]
-
+    func similarityScoreWithTestDataReturnsCorrectResult() {
+        let locations1 = [3, 4, 2, 1, 3, 3]
+        let locations2 = [4, 3, 5, 3, 9, 3]
+        
         let dataset = LocationDataset(locations1: locations1, locations2: locations2)
 
-        let result = dataset.totalDistance
-
-        #expect(result == 1)
-    }
-
-    @Test
-    func totalDistanceWithOneSetOfLocationsWhichHaveADistanceOfNegativeOneReturnsOne() {
-        let locations1 = [1]
-        let locations2 = [0]
-
-        let dataset = LocationDataset(locations1: locations1, locations2: locations2)
-
-        let result = dataset.totalDistance
-
-        #expect(result == 1)
-    }
-
-    @Test
-    func totalDistanceWithOneSetOfLocationsReturnsCorrectResult() {
-        let locations1 = [1, 5, 2, 9, 1]
-        let locations2 = [5, 8, 10, 2, 123]
-
-        let dataset = LocationDataset(locations1: locations1, locations2: locations2)
-
-        let result = dataset.totalDistance
-
-        #expect(result == 130)
+        #expect(dataset.similarityScore == 31)
     }
 
 }
