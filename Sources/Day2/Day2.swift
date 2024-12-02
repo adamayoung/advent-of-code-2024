@@ -8,7 +8,7 @@
 import Foundation
 
 ///
-/// Day 1: Red-Nosed Reports
+/// Day 2: Red-Nosed Reports
 ///
 @main
 struct Day2 {
