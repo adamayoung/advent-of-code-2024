@@ -19,13 +19,26 @@ struct Day2 {
             fatalError("input file missing")
         }
 
-        let datset = try await ReportDataset(fileURL: inputFileURL)
-        let safeReportsCount = datset.safeReportsCount
-        let safeReportsWithProblemDampenerCount = datset.safeReportsWithProblemDampenerCount
+        let dataset = try await ReportDataset(fileURL: inputFileURL)
+        let safeReportsCount = dataset.safeReportsCount()
+        let safeReportsWithProblemDampenerCount = dataset.safeReportsCount(withProblemDampener: true)
 
-        print("Number of Safe reports: \(safeReportsCount)")
+        printResults(
+            safeReportsCount: safeReportsCount,
+            safeReportsWithProblemDampenerCount: safeReportsWithProblemDampenerCount
+        )
+    }
+
+    private static func printResults(
+        safeReportsCount: Int,
+        safeReportsWithProblemDampenerCount: Int
+    ) {
+        print("Day 2: Red-Nosed Reports")
+        print("========================\n")
+        print("Number of safe reports: \(safeReportsCount)")
         print(
-            "Number of Safe reports with problem dampener: \(safeReportsWithProblemDampenerCount)")
+            "Number of safe reports with problem dampener: \(safeReportsWithProblemDampenerCount)"
+        )
     }
 
 }
