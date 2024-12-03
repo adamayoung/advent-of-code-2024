@@ -9,7 +9,7 @@ import Testing
 
 @testable import Day3
 
-@Suite("SumOfAllMultiplicationsTests tests")
+@Suite("Sum of all multiplications tests")
 struct SumOfAllMultiplicationsTests {
 
     @Test("sumOfAllMultiplications when using test data returns correct result")

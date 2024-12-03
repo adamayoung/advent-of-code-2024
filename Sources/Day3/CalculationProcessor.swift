@@ -9,16 +9,48 @@ import Foundation
 
 final class CalculationProcessor: Sendable {
 
-    private let multiplications: [(Int, Int)]
+    private let instructions: [Instruction]
 
-    init(multiplications: [(Int, Int)]) {
-        self.multiplications = multiplications
+    init(instructions: [Instruction]) {
+        self.instructions = instructions
     }
 
     func sumOfAllMultiplications() -> Int {
-        multiplications.reduce(0) { result, m in
-            result + (m.0 * m.1)
+        instructions.reduce(0) { result, instruction in
+            switch instruction {
+            case .multiple(let i, let j):
+                return result + (i * j)
+            default:
+                return result
+            }
         }
+    }
+
+    func sumOfAllMultiplicationsWithConditionals() -> Int {
+        var result = 0
+        var isEnabled = true
+        for instruction in instructions {
+            switch instruction {
+            case .enable:
+                isEnabled = true
+            case .disable:
+                isEnabled = false
+            case .multiple(let i, let j):
+                result += (isEnabled ? (i * j) : 0)
+            }
+        }
+
+        return result
+    }
+
+}
+
+extension CalculationProcessor {
+
+    enum Instruction {
+        case multiple(Int, Int)
+        case enable
+        case disable
     }
 
 }
@@ -43,11 +75,27 @@ extension CalculationProcessor {
     }
 
     convenience init(data: String) {
-        let ranges = data.ranges(of: /mul\(\d+,\d+\)/)
-        var multiplications: [(Int, Int)] = []
+        let ranges = data.ranges(of: /(mul\(\d+,\d+\)|do\(\)|don't\(\))/)
+        var instructions: [Instruction] = []
+
         for range in ranges {
-            let mul = String(data[range])
-            guard let numberPair = mul.split(separator: "(").last?.split(separator: ")").first
+            let instructionString = String(data[range])
+
+            if instructionString.starts(with: "do(") {
+                instructions.append(.enable)
+                continue
+            }
+
+            if instructionString.starts(with: "don't(") {
+                instructions.append(.disable)
+                continue
+            }
+
+            guard
+                let numberPair =
+                    instructionString
+                    .split(separator: "(").last?
+                    .split(separator: ")").first
             else {
                 continue
             }
@@ -57,10 +105,10 @@ extension CalculationProcessor {
                 continue
             }
 
-            multiplications.append((numbers[0], numbers[1]))
+            instructions.append(.multiple(numbers[0], numbers[1]))
         }
 
-        self.init(multiplications: multiplications)
+        self.init(instructions: instructions)
     }
 
 }

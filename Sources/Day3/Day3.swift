@@ -21,14 +21,23 @@ struct Day3 {
 
         let processor = try await CalculationProcessor(fileURL: inputFileURL)
         let sumOfAllMultiplications = processor.sumOfAllMultiplications()
+        let sumOfAllMultiplicationsWithConditionals =
+            processor.sumOfAllMultiplicationsWithConditionals()
 
-        printResults(sumOfAllMultiplications: sumOfAllMultiplications)
+        printResults(
+            sumOfAllMultiplications: sumOfAllMultiplications,
+            sumOfAllMultiplicationsWithConditionals: sumOfAllMultiplicationsWithConditionals
+        )
     }
 
-    private static func printResults(sumOfAllMultiplications: Int) {
+    private static func printResults(
+        sumOfAllMultiplications: Int,
+        sumOfAllMultiplicationsWithConditionals: Int
+    ) {
         print("Day 3: Mull It Over")
         print("========================\n")
         print("sumOfAllMultiplications: \(sumOfAllMultiplications)")
+        print("sumOfAllMultiplicationsWithConditionals: \(sumOfAllMultiplicationsWithConditionals)")
     }
 
 }
