@@ -15,42 +15,26 @@ final class CalculationProcessor: Sendable {
         self.instructions = instructions
     }
 
-    func sumOfAllMultiplications() -> Int {
-        instructions.reduce(0) { result, instruction in
-            switch instruction {
-            case .multiple(let i, let j):
-                return result + (i * j)
-            default:
-                return result
-            }
-        }
-    }
-
-    func sumOfAllMultiplicationsWithConditionals() -> Int {
+    func sumOfAllMultiplications(withConditionals: Bool = false) -> Int {
         var result = 0
         var isEnabled = true
         for instruction in instructions {
             switch instruction {
-            case .enable:
+            case .enable where withConditionals:
                 isEnabled = true
-            case .disable:
+
+            case .disable where withConditionals:
                 isEnabled = false
+
             case .multiple(let i, let j):
                 result += (isEnabled ? (i * j) : 0)
+
+            default:
+                break
             }
         }
 
         return result
-    }
-
-}
-
-extension CalculationProcessor {
-
-    enum Instruction {
-        case multiple(Int, Int)
-        case enable
-        case disable
     }
 
 }
@@ -80,35 +64,85 @@ extension CalculationProcessor {
 
         for range in ranges {
             let instructionString = String(data[range])
-
-            if instructionString.starts(with: "do(") {
-                instructions.append(.enable)
+            guard let instruction = Instruction(instructionString) else {
                 continue
             }
 
-            if instructionString.starts(with: "don't(") {
-                instructions.append(.disable)
-                continue
-            }
-
-            guard
-                let numberPair =
-                    instructionString
-                    .split(separator: "(").last?
-                    .split(separator: ")").first
-            else {
-                continue
-            }
-
-            let numbers = numberPair.split(separator: ",").compactMap { Int($0) }
-            guard numbers.count == 2 else {
-                continue
-            }
-
-            instructions.append(.multiple(numbers[0], numbers[1]))
+            instructions.append(instruction)
         }
 
         self.init(instructions: instructions)
+    }
+
+}
+
+extension CalculationProcessor {
+
+    enum Instruction {
+        case multiple(Int, Int)
+        case enable
+        case disable
+    }
+
+}
+
+extension CalculationProcessor.Instruction {
+
+    init?(_ instructionString: String) {
+        if let instruction = Self.parseDoInstruction(instructionString) {
+            self = instruction
+            return
+        }
+
+        if let instruction = Self.parseDontInstruction(instructionString) {
+            self = instruction
+            return
+        }
+
+        if let instruction = Self.parseMulInstruction(instructionString) {
+            self = instruction
+            return
+        }
+
+        return nil
+    }
+
+    private static func parseDoInstruction(_ instructionString: String) -> Self? {
+        guard instructionString.starts(with: "do(") else {
+            return nil
+        }
+
+        return .enable
+    }
+
+    private static func parseDontInstruction(_ instructionString: String) -> Self? {
+        guard instructionString.starts(with: "don't(") else {
+            return nil
+        }
+
+        return .disable
+    }
+
+    private static func parseMulInstruction(_ instructionString: String) -> Self? {
+        guard instructionString.starts(with: "mul(") else {
+            return nil
+        }
+
+        guard
+            let numberPair =
+                instructionString
+                .split(separator: "(").last?
+                .split(separator: ")").first
+        else {
+            return nil
+        }
+
+        let numbers = numberPair.split(separator: ",").compactMap { Int($0) }
+        guard numbers.count == 2 else {
+            return nil
+        }
+
+        return .multiple(numbers[0], numbers[1])
     }
 
 }

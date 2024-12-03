@@ -22,7 +22,7 @@ struct Day3 {
         let processor = try await CalculationProcessor(fileURL: inputFileURL)
         let sumOfAllMultiplications = processor.sumOfAllMultiplications()
         let sumOfAllMultiplicationsWithConditionals =
-            processor.sumOfAllMultiplicationsWithConditionals()
+            processor.sumOfAllMultiplications(withConditionals: true)
 
         printResults(
             sumOfAllMultiplications: sumOfAllMultiplications,

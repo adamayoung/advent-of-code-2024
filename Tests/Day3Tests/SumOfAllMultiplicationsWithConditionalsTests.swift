@@ -18,7 +18,7 @@ struct SumOfAllMultiplicationsWithConditionalsTests {
 
         let processor = CalculationProcessor(data: data)
 
-        #expect(processor.sumOfAllMultiplicationsWithConditionals() == 48)
+        #expect(processor.sumOfAllMultiplications(withConditionals: true) == 48)
     }
 
 }
