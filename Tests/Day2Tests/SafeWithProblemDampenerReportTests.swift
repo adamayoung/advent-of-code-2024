@@ -19,14 +19,18 @@ struct SafeWithProblemDampenerReportTests {
         #expect(report.isSafeWithProblemDampener)
     }
 
-    @Test("reportIsSafeWithProblemDampener when levels are unsafe with any level removed returns false")
+    @Test(
+        "reportIsSafeWithProblemDampener when levels are unsafe with any level removed returns false"
+    )
     func reportIsSafeWithProblemDampenerWhenLevelsAreUnsafeWithAnyLevelRemovedReturnsFalse() {
         let report = Report(levels: [1, 2, 7, 8, 9])
 
         #expect(!report.isSafeWithProblemDampener)
     }
 
-    @Test("reportIsSafeWithProblemDampener when levels are unsafe with one level removed returns true")
+    @Test(
+        "reportIsSafeWithProblemDampener when levels are unsafe with one level removed returns true"
+    )
     func reportIsSafeWithProblemDampenerWhenLevelsAreUnsafeWithOneLevelRemovedReturnsTrue() {
         let report = Report(levels: [1, 3, 2, 4, 5])
 

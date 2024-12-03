@@ -21,7 +21,8 @@ struct Day2 {
 
         let dataset = try await ReportDataset(fileURL: inputFileURL)
         let safeReportsCount = dataset.safeReportsCount()
-        let safeReportsWithProblemDampenerCount = dataset.safeReportsCount(withProblemDampener: true)
+        let safeReportsWithProblemDampenerCount = dataset.safeReportsCount(
+            withProblemDampener: true)
 
         printResults(
             safeReportsCount: safeReportsCount,

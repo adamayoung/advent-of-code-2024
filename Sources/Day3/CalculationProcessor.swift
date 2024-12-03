@@ -44,10 +44,11 @@ extension CalculationProcessor {
 
     convenience init(data: String) {
         let ranges = data.ranges(of: /mul\(\d+,\d+\)/)
-        var multiplications = [(Int, Int)]()
+        var multiplications: [(Int, Int)] = []
         for range in ranges {
             let mul = String(data[range])
-            guard let numberPair = mul.split(separator: "(").last?.split(separator: ")").first else {
+            guard let numberPair = mul.split(separator: "(").last?.split(separator: ")").first
+            else {
                 continue
             }
 
