@@ -9,10 +9,10 @@ import Testing
 
 @testable import Day4
 
-@Suite("Xmas search tests")
-struct XmasSearchTests {
+@Suite("Number of XMAS occurences tests")
+struct NumberOfXMASOccurencesTests {
 
-    @Test("xmasOccurrences when contains XMAS from left to right returns 1")
+    @Test("numberOfXMASOccurrences when contains XMAS from left to right returns 1")
     func xmasOccurrencesWhenContainsXMASFromLeftToRightReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -20,12 +20,12 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when contains XMAS from right to left returns 1")
+    @Test("numberOfXMASOccurrences when contains XMAS from right to left returns 1")
     func xmasOccurrencesWhenContainsXMASFromRightToLeftReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -33,12 +33,12 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when contains XMAS from top to bottom returns 1")
+    @Test("numberOfXMASOccurrences when contains XMAS from top to bottom returns 1")
     func xmasOccurrencesWhenContainsXMASFromTopToBottomReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -49,12 +49,12 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when contains XMAS from bottom to top returns 1")
+    @Test("numberOfXMASOccurrences when contains XMAS from bottom to top returns 1")
     func xmasOccurrencesWhenContainsXMASFromBottomToTopReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -65,12 +65,14 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when contains XMAS from diagonal top left to bottom right returns 1")
+    @Test(
+        "numberOfXMASOccurrences when contains XMAS from diagonal top left to bottom right returns 1"
+    )
     func xmasOccurrencesWhenContainsXMASFromDiagonalTopLeftToBottomRightReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -81,12 +83,14 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when contains XMAS from diagonal top right to bottom left returns 1")
+    @Test(
+        "numberOfXMASOccurrences when contains XMAS from diagonal top right to bottom left returns 1"
+    )
     func xmasOccurrencesWhenContainsXMASFromDiagonalTopRightToBottomLeftReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -97,12 +101,14 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when contains XMAS from diagonal bottom left to top right returns 1")
+    @Test(
+        "numberOfXMASOccurrences when contains XMAS from diagonal bottom left to top right returns 1"
+    )
     func xmasOccurrencesWhenContainsXMASFromDiagonalBottomLeftToTopRightReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -113,12 +119,14 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when contains XMAS from diagonal bottom right to top left returns 1")
+    @Test(
+        "numberOfXMASOccurrences when contains XMAS from diagonal bottom right to top left returns 1"
+    )
     func xmasOccurrencesWhenContainsXMASFromDiagonalBottomRightToTopLeftReturns1() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -129,12 +137,12 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 1)
     }
 
-    @Test("xmasOccurrences when using subset of test data 1 returns correct result")
+    @Test("numberOfXMASOccurrences when using subset of test data 1 returns correct result")
     func xmasOccurrencesWhenUsingSubsetOfTestData1ReturnsCorrectResult() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -146,12 +154,12 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 2)
     }
 
-    @Test("xmasOccurrences when 2 XMASes start from same coordinate returns 2")
+    @Test("numberOfXMASOccurrences when 2 XMASes start from same coordinate returns 2")
     func xmasOccurrencesWhen2XMASesStartFromSameCoordinateReturns2() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -163,12 +171,12 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 2)
     }
 
-    @Test("xmasOccurrences when using test data 1 returns correct result")
+    @Test("numberOfXMASOccurrences when using test data 1 returns correct result")
     func xmasOccurrencesWhenUsingTestData1ReturnsCorrectResult() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -180,12 +188,12 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 4)
     }
 
-    @Test("xmasOccurrences when using test data 2 returns correct result")
+    @Test("numberOfXMASOccurrences when using test data 2 returns correct result")
     func xmasOccurrencesWhenUsingTestData2ReturnsCorrectResult() async {
         let wordsearch = Wordsearch(
             characterMap: [
@@ -202,7 +210,7 @@ struct XmasSearchTests {
             ]
         )
 
-        let count = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let count = await wordsearch.numberOfXMASOccurrences()
 
         #expect(count == 18)
     }

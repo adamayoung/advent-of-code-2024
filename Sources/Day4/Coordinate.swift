@@ -7,9 +7,7 @@
 
 import Foundation
 
-typealias WordCoordinates = [Coordinate]
-
-struct Coordinate: Sendable, CustomStringConvertible {
+struct Coordinate: Sendable, Equatable, Hashable, CustomStringConvertible {
 
     let row: Int
     let column: Int

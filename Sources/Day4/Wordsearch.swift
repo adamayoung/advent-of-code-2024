@@ -20,19 +20,54 @@ final class Wordsearch: Sendable {
         self.init(grid: grid)
     }
 
-    func numberOfOccurrences(of word: String) async -> Int {
-        let searchCharacters = [Character](word)
-        guard let startingCharacter = searchCharacters.first else {
-            return 0
+    func numberOfXMASOccurrences() async -> Int {
+        let wordCoordinatesGroup = await wordCoordinatesGroup(for: "XMAS")
+        return wordCoordinatesGroup.count
+    }
+
+    func numberOfXxMASOccurrences() async -> Int {
+        let wordCoordinatesGroup = await wordCoordinatesGroup(for: "MAS")
+        var count = 0
+        var haveSeenEachOther: [WordCoordinates: [WordCoordinates]] = [:]
+        for wordCoordinates in wordCoordinatesGroup {
+            let crossingDirections = wordCoordinates.direction.crossing
+            for otherWordCoordinates in wordCoordinatesGroup
+            where otherWordCoordinates != wordCoordinates {
+                guard
+                    !haveSeenEachOther[otherWordCoordinates, default: []].contains(wordCoordinates),
+                    !haveSeenEachOther[wordCoordinates, default: []].contains(otherWordCoordinates)
+                else {
+                    continue
+                }
+
+                guard
+                    wordCoordinates[1] == otherWordCoordinates[1],
+                    crossingDirections.contains(otherWordCoordinates.direction)
+                else {
+                    continue
+                }
+
+                haveSeenEachOther[wordCoordinates, default: []].append(otherWordCoordinates)
+                haveSeenEachOther[otherWordCoordinates, default: []].append(wordCoordinates)
+
+                count += 1
+            }
+        }
+
+        return count
+    }
+
+    private func wordCoordinatesGroup(
+        for wordString: String
+    ) async -> [WordCoordinates] {
+        let searchWord = Word(wordString)
+        guard let startingCharacter = searchWord.first else {
+            return []
         }
 
         let startingCoordinates = grid.coordinates(for: startingCharacter)
         guard !startingCoordinates.isEmpty else {
-            return 0
-        }
-
-        guard searchCharacters.count >= 2 else {
-            return startingCoordinates.count
+            return []
         }
 
         let wordCoordinatesGroup = await withTaskGroup(
@@ -41,7 +76,7 @@ final class Wordsearch: Sendable {
             for startingCoordinate in startingCoordinates {
                 taskGroup.addTask {
                     await self.grid.coordinatesGroup(
-                        for: searchCharacters,
+                        for: searchWord,
                         startingAt: startingCoordinate
                     )
                 }
@@ -57,7 +92,7 @@ final class Wordsearch: Sendable {
             return wordCoordinatesGroup
         }
 
-        return wordCoordinatesGroup.count
+        return wordCoordinatesGroup
     }
 
 }

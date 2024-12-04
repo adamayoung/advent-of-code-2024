@@ -20,15 +20,23 @@ struct Day4 {
         }
 
         let wordsearch = try await Wordsearch(fileURL: inputFileURL)
-        let numberOfXmasOccurrences = await wordsearch.numberOfOccurrences(of: "XMAS")
+        let numberOfXmasOccurrences = await wordsearch.numberOfXMASOccurrences()
+        let numberOfXxMasOccurrences = await wordsearch.numberOfXxMASOccurrences()
 
-        printResults(numberOfXmasOccurrences: numberOfXmasOccurrences)
+        printResults(
+            numberOfXmasOccurrences: numberOfXmasOccurrences,
+            numberOfXxMasOccurrences: numberOfXxMasOccurrences
+        )
     }
 
-    private static func printResults(numberOfXmasOccurrences: Int) {
+    private static func printResults(
+        numberOfXmasOccurrences: Int,
+        numberOfXxMasOccurrences: Int
+    ) {
         print("Day 4: Ceres Search")
         print("========================\n")
         print("numberOfXmasOccurrences: \(numberOfXmasOccurrences)")
+        print("numberOfXxMasOccurrences: \(numberOfXxMasOccurrences)")
     }
 
 }

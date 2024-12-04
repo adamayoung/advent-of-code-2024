@@ -43,50 +43,23 @@ struct Grid: Sendable {
         for word: Word,
         startingAt startCoordinate: Coordinate
     ) async -> [WordCoordinates] {
-        let directionsToSearch: [Direction] = {
+        let possibleDirections: [Direction] = {
             let nextCharacter = word[1]
-            var directions: [Direction] = []
+            var possibleDirections: [Direction] = []
 
-            if character(at: startCoordinate.north) == nextCharacter {
-                directions.append(.north)
+            for directionToSearch in Direction.allCases
+            where character(at: startCoordinate.move(in: directionToSearch)) == nextCharacter {
+                possibleDirections.append(directionToSearch)
             }
 
-            if character(at: startCoordinate.northEast) == nextCharacter {
-                directions.append(.northEast)
-            }
-
-            if character(at: startCoordinate.east) == nextCharacter {
-                directions.append(.east)
-            }
-
-            if character(at: startCoordinate.southEast) == nextCharacter {
-                directions.append(.southEast)
-            }
-
-            if character(at: startCoordinate.south) == nextCharacter {
-                directions.append(.south)
-            }
-
-            if character(at: startCoordinate.southWest) == nextCharacter {
-                directions.append(.southWest)
-            }
-
-            if character(at: startCoordinate.west) == nextCharacter {
-                directions.append(.west)
-            }
-
-            if character(at: startCoordinate.northWest) == nextCharacter {
-                directions.append(.northWest)
-            }
-
-            return directions
+            return possibleDirections
         }()
 
         let wordCoordinatesGroup = await withTaskGroup(
             of: Optional<WordCoordinates>.self,
             returning: [WordCoordinates].self
         ) { taskGroup in
-            for direction in directionsToSearch {
+            for direction in possibleDirections {
                 taskGroup.addTask {
                     await self.wordCoordinates(
                         for: word,
@@ -114,25 +87,25 @@ struct Grid: Sendable {
         startingAt startCoordinate: Coordinate,
         inDirection direction: Direction
     ) async -> WordCoordinates? {
-        var wordCoordinates = WordCoordinates()
+        var coordinates: [Coordinate] = []
         var currentCoordinate = startCoordinate
-        wordCoordinates.append(currentCoordinate)
+        coordinates.append(currentCoordinate)
 
         for (index, searchCharacter) in word.enumerated() where index >= 1 {
             if character(at: currentCoordinate.move(in: direction)) == searchCharacter {
                 currentCoordinate = currentCoordinate.move(in: direction)
-                wordCoordinates.append(currentCoordinate)
+                coordinates.append(currentCoordinate)
                 continue
             }
 
             break
         }
 
-        guard wordCoordinates.count == word.count else {
+        guard coordinates.count == word.count else {
             return nil
         }
 
-        return wordCoordinates
+        return WordCoordinates(coordinates: coordinates, direction: direction)
     }
 
 }
