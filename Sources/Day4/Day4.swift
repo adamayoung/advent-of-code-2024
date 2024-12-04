@@ -20,10 +20,10 @@ struct Day4 {
         }
 
         let wordsearch = try await Wordsearch(fileURL: inputFileURL)
-        let numberOfXmasOccurrences = await wordsearch.numberOfXMASOccurrences()
-        let numberOfXxMasOccurrences = await wordsearch.numberOfXxMASOccurrences()
+        async let numberOfXmasOccurrences = wordsearch.numberOfXMASOccurrences()
+        async let numberOfXxMasOccurrences = wordsearch.numberOfXxMASOccurrences()
 
-        printResults(
+        await printResults(
             numberOfXmasOccurrences: numberOfXmasOccurrences,
             numberOfXxMasOccurrences: numberOfXxMasOccurrences
         )
