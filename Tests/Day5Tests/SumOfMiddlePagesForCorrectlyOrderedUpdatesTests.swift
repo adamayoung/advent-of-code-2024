@@ -5,6 +5,7 @@
 //  Created by Adam Young on 05/12/2024.
 //
 
+import Foundation
 import Testing
 
 @testable import Day5
@@ -49,7 +50,21 @@ struct SumOfMiddlePagesForCorrectlyOrderedUpdatesTests {
             ]
         )
 
-        #expect(printerInstructions.sumOfMiddlePagesForCorrectlyOrderedUpdates() == 143)
+        await #expect(printerInstructions.sumOfMiddlePagesForCorrectlyOrderedUpdates() == 143)
+    }
+
+    @Test("sumOfMiddlePagesForCorrectlyOrderedUpdates with real input returns correct result")
+    func sumOfMiddlePagesForCorrectlyOrderedUpdatesWithRealInputReturnsCorrectResult() async throws
+    {
+        let inputFileURL = try #require(
+            Bundle.module.url(forResource: "real-input", withExtension: "txt")
+        )
+
+        let printerInstructions = try await PrinterInstructions(fileURL: inputFileURL)
+
+        await #expect(
+            printerInstructions.sumOfMiddlePagesForCorrectlyOrderedUpdates() == 6034
+        )
     }
 
 }

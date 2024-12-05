@@ -34,14 +34,61 @@ final class PrinterInstructions: Sendable {
         self.pagesToProduceInUpdates = pagesToProduceInUpdates
     }
 
-    func sumOfMiddlePagesForCorrectlyOrderedUpdates() -> Int {
+    func sumOfMiddlePagesForCorrectlyOrderedUpdates() async -> Int {
+        await withTaskGroup(of: Optional<Int>.self, returning: Int.self) { taskGroup in
+            for pages in pagesToProduceInUpdates {
+                taskGroup.addTask {
+                    guard self.arePagesToProduceInCorrectOrder(pages) else {
+                        return nil
+                    }
+
+                    let middlePageIndex = pages.count / 2
+                    let middlePage = pages[middlePageIndex]
+                    return middlePage
+                }
+            }
+
+            return await taskGroup.reduce(into: 0) { sumOfMiddlePages, middlePage in
+                if let middlePage {
+                    sumOfMiddlePages += middlePage
+                }
+            }
+        }
+    }
+
+    func sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering() async -> Int {
+        await withTaskGroup(of: Optional<Int>.self, returning: Int.self) { taskGroup in
+            for pages in pagesToProduceInUpdates {
+                taskGroup.addTask {
+                    guard !self.arePagesToProduceInCorrectOrder(pages) else {
+                        return nil
+                    }
+
+                    let orderedPages = self.orderPages(pages)
+                    let middlePageIndex = orderedPages.count / 2
+                    let middlePage = orderedPages[middlePageIndex]
+
+                    return middlePage
+                }
+            }
+
+            return await taskGroup.reduce(into: 0) { sumOfMiddlePages, middlePage in
+                if let middlePage {
+                    sumOfMiddlePages += middlePage
+                }
+            }
+        }
+    }
+
+    func sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrderingOld() async -> Int {
         let sum = pagesToProduceInUpdates.reduce(0) { sum, pagesToProduce in
-            guard arePagesToProduceInCorrectOrder(pagesToProduce) else {
+            guard !arePagesToProduceInCorrectOrder(pagesToProduce) else {
                 return sum
             }
 
-            let middlePageIndex = pagesToProduce.count / 2
-            let middlePage = pagesToProduce[middlePageIndex]
+            let orderedPagesToProduce = orderPages(pagesToProduce)
+            let middlePageIndex = orderedPagesToProduce.count / 2
+            let middlePage = orderedPagesToProduce[middlePageIndex]
 
             return sum + middlePage
         }
@@ -67,6 +114,36 @@ final class PrinterInstructions: Sendable {
         }
 
         return true
+    }
+
+    private func orderPages(_ pages: [Int]) -> [Int] {
+        var orderedPages = pages
+
+        for i in 0..<pages.count {
+            let page = pages[i]
+            guard let index = orderedPages.firstIndex(of: page) else {
+                continue
+            }
+
+            guard let pagesAfter = pageOrderingRulesLookupTable[page] else {
+                continue
+            }
+
+            let indexToMoveTo = pagesAfter.reduce(into: Int.max) { sum, pageAfter in
+                if let pageAfterIndex = orderedPages.firstIndex(of: pageAfter) {
+                    sum = min(sum, pageAfterIndex)
+                }
+            }
+
+            guard index > indexToMoveTo else {
+                continue
+            }
+
+            let pageToMove = orderedPages.remove(at: index)
+            orderedPages.insert(pageToMove, at: indexToMoveTo)
+        }
+
+        return orderedPages
     }
 
 }

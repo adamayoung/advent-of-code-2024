@@ -20,21 +20,30 @@ struct Day5 {
         }
 
         let printerInstructions = try await PrinterInstructions(fileURL: inputFileURL)
-        let sumOfMiddlePagesForCorrectlyOrderedUpdates =
+
+        async let sumOfMiddlePagesForCorrectlyOrderedUpdates =
             printerInstructions
             .sumOfMiddlePagesForCorrectlyOrderedUpdates()
 
-        printResults(
-            sumOfMiddlePagesForCorrectlyOrderedUpdates: sumOfMiddlePagesForCorrectlyOrderedUpdates
+        async let sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering =
+            printerInstructions
+            .sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering()
+
+        await printResults(
+            sumOfMiddlePagesForCorrectlyOrderedUpdates: sumOfMiddlePagesForCorrectlyOrderedUpdates,
+            sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering:
+                sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering
         )
     }
 
     private static func printResults(
-        sumOfMiddlePagesForCorrectlyOrderedUpdates sumOfUpdates: Int
+        sumOfMiddlePagesForCorrectlyOrderedUpdates sumOfUpdates: Int,
+        sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering sumOfIncorrectUpdates: Int
     ) {
         print("Day 5: Print Queue")
         print("========================\n")
         print("sumOfMiddlePagesForCorrectlyOrderedUpdates: \(sumOfUpdates)")
+        print("sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering: \(sumOfIncorrectUpdates)")
     }
 
 }

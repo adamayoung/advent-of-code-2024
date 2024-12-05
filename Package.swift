@@ -30,6 +30,6 @@ let package = Package(
         .testTarget(name: "Day4Tests", dependencies: ["Day4"]),
 
         .executableTarget(name: "Day5", resources: [.process("Resources")]),
-        .testTarget(name: "Day5Tests", dependencies: ["Day5"])
+        .testTarget(name: "Day5Tests", dependencies: ["Day5"], resources: [.process("Resources")])
     ]
 )
