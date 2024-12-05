@@ -16,7 +16,7 @@ final class PrinterInstructions: Sendable {
         pageOrderingRules: [(Int, Int)],
         pagesToProduceInUpdates: [[Int]]
     ) {
-        let pageOrderingRulesLookupTable: [Int: [Int]] = pageOrderingRules.reduce(into: [:]) {
+        let pageOrderingRulesLookupTable = pageOrderingRules.reduce(into: [:]) {
             $0[$1.0, default: []].append($1.1)
         }
 
@@ -35,33 +35,23 @@ final class PrinterInstructions: Sendable {
     }
 
     func sumOfMiddlePagesForCorrectlyOrderedUpdates() async -> Int {
-        await withTaskGroup(of: Optional<Int>.self, returning: Int.self) { taskGroup in
-            for pages in pagesToProduceInUpdates {
+        await withTaskGroup(of: Int.self, returning: Int.self) { taskGroup in
+            for pages in pagesToProduceInUpdates where self.arePagesToProduceInCorrectOrder(pages) {
                 taskGroup.addTask {
-                    guard self.arePagesToProduceInCorrectOrder(pages) else {
-                        return nil
-                    }
-
                     let middlePageIndex = pages.count / 2
                     let middlePage = pages[middlePageIndex]
                     return middlePage
                 }
             }
 
-            return await taskGroup.reduce(into: 0) { sumOfMiddlePages, middlePage in
-                sumOfMiddlePages += middlePage ?? 0
-            }
+            return await taskGroup.reduce(into: 0, +=)
         }
     }
 
     func sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering() async -> Int {
-        await withTaskGroup(of: Optional<Int>.self, returning: Int.self) { taskGroup in
-            for pages in pagesToProduceInUpdates {
+        await withTaskGroup(of: Int.self, returning: Int.self) { taskGroup in
+            for pages in pagesToProduceInUpdates where !self.arePagesToProduceInCorrectOrder(pages) {
                 taskGroup.addTask {
-                    guard !self.arePagesToProduceInCorrectOrder(pages) else {
-                        return nil
-                    }
-
                     let orderedPages = self.orderPages(pages)
                     let middlePageIndex = orderedPages.count / 2
                     let middlePage = orderedPages[middlePageIndex]
@@ -69,11 +59,13 @@ final class PrinterInstructions: Sendable {
                 }
             }
 
-            return await taskGroup.reduce(into: 0) { sumOfMiddlePages, middlePage in
-                sumOfMiddlePages += middlePage ?? 0
-            }
+            return await taskGroup.reduce(into: 0, +=)
         }
     }
+
+}
+
+extension PrinterInstructions {
 
     private func arePagesToProduceInCorrectOrder(_ pages: [Int]) -> Bool {
         for (index, page) in pages.enumerated() {
@@ -114,8 +106,8 @@ final class PrinterInstructions: Sendable {
             }
 
             if index > indexToMoveTo {
-                let pageToMove = orderedPages.remove(at: index)
-                orderedPages.insert(pageToMove, at: indexToMoveTo)
+                let from = RangeSet([index], within: orderedPages)
+                orderedPages.moveSubranges(from, to: indexToMoveTo)
             }
         }
 
@@ -155,10 +147,6 @@ extension PrinterInstructions {
     }
 
     private static func parsePageOrderingRule(from line: String) -> (Int, Int)? {
-        guard !line.isEmpty else {
-            return nil
-        }
-
         let parts = line.split(separator: "|")
         guard parts.count == 2 else {
             return nil
@@ -172,10 +160,6 @@ extension PrinterInstructions {
     }
 
     private static func parsePagesToProduce(from line: String) -> [Int]? {
-        guard !line.isEmpty else {
-            return nil
-        }
-
         let parts = line.split(separator: ",")
         let pages = parts.compactMap { Int($0) }
         guard parts.count == pages.count else {
