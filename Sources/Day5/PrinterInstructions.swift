@@ -49,9 +49,7 @@ final class PrinterInstructions: Sendable {
             }
 
             return await taskGroup.reduce(into: 0) { sumOfMiddlePages, middlePage in
-                if let middlePage {
-                    sumOfMiddlePages += middlePage
-                }
+                sumOfMiddlePages += middlePage ?? 0
             }
         }
     }
@@ -67,33 +65,14 @@ final class PrinterInstructions: Sendable {
                     let orderedPages = self.orderPages(pages)
                     let middlePageIndex = orderedPages.count / 2
                     let middlePage = orderedPages[middlePageIndex]
-
                     return middlePage
                 }
             }
 
             return await taskGroup.reduce(into: 0) { sumOfMiddlePages, middlePage in
-                if let middlePage {
-                    sumOfMiddlePages += middlePage
-                }
+                sumOfMiddlePages += middlePage ?? 0
             }
         }
-    }
-
-    func sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrderingOld() async -> Int {
-        let sum = pagesToProduceInUpdates.reduce(0) { sum, pagesToProduce in
-            guard !arePagesToProduceInCorrectOrder(pagesToProduce) else {
-                return sum
-            }
-
-            let orderedPagesToProduce = orderPages(pagesToProduce)
-            let middlePageIndex = orderedPagesToProduce.count / 2
-            let middlePage = orderedPagesToProduce[middlePageIndex]
-
-            return sum + middlePage
-        }
-
-        return sum
     }
 
     private func arePagesToProduceInCorrectOrder(_ pages: [Int]) -> Bool {
@@ -119,8 +98,7 @@ final class PrinterInstructions: Sendable {
     private func orderPages(_ pages: [Int]) -> [Int] {
         var orderedPages = pages
 
-        for i in 0..<pages.count {
-            let page = pages[i]
+        for page in pages {
             guard let index = orderedPages.firstIndex(of: page) else {
                 continue
             }
@@ -135,12 +113,10 @@ final class PrinterInstructions: Sendable {
                 }
             }
 
-            guard index > indexToMoveTo else {
-                continue
+            if index > indexToMoveTo {
+                let pageToMove = orderedPages.remove(at: index)
+                orderedPages.insert(pageToMove, at: indexToMoveTo)
             }
-
-            let pageToMove = orderedPages.remove(at: index)
-            orderedPages.insert(pageToMove, at: indexToMoveTo)
         }
 
         return orderedPages
