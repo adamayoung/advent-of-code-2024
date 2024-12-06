@@ -39,14 +39,14 @@ struct SafeReportTests {
 
         let dataset = ReportDataset(reports: reports)
 
-        await #expect(dataset.safeReportsCount() == 2)
+        #expect(dataset.safeReportsCount() == 2)
     }
 
     @Test("safeReportsCount with real input returns correct result")
     func safeReportsCountWithRealInputReturnsCorrectResult() async throws {
         let dataset = try await ReportDataset()
 
-        await #expect(dataset.safeReportsCount() == 202)
+        #expect(dataset.safeReportsCount() == 202)
     }
 
 }

@@ -43,6 +43,7 @@ final class Wordsearch: Sendable {
         let wordCoordinatesGroup = await wordCoordinatesGroup(for: "MAS")
         var count = 0
         var haveSeenEachOther: [WordCoordinates: [WordCoordinates]] = [:]
+
         for wordCoordinates in wordCoordinatesGroup {
             let crossingDirections = wordCoordinates.direction.crossing
             for otherWordCoordinates in wordCoordinatesGroup
@@ -84,9 +85,7 @@ final class Wordsearch: Sendable {
             return []
         }
 
-        let wordCoordinatesGroup = await withTaskGroup(
-            of: [WordCoordinates].self, returning: [WordCoordinates].self
-        ) { taskGroup in
+        let wordCoordinatesGroup = await withTaskGroup(of: [WordCoordinates].self) { taskGroup in
             for startingCoordinate in startingCoordinates {
                 taskGroup.addTask {
                     await self.grid.coordinatesGroup(
@@ -96,12 +95,7 @@ final class Wordsearch: Sendable {
                 }
             }
 
-            var wordCoordinatesGroup: [WordCoordinates] = []
-            for await coordinatesGroup in taskGroup {
-                wordCoordinatesGroup.append(contentsOf: coordinatesGroup)
-            }
-
-            return wordCoordinatesGroup
+            return await taskGroup.reduce(into: []) { $0.append(contentsOf: $1) }
         }
 
         return wordCoordinatesGroup
@@ -120,10 +114,7 @@ extension Wordsearch {
             try? handle.close()
         }
 
-        var rows: [String] = []
-        for try await line in handle.bytes.lines {
-            rows.append(line)
-        }
+        let rows = try await handle.bytes.lines.reduce(into: []) { $0.append($1) }
 
         self.init(rows: rows)
     }

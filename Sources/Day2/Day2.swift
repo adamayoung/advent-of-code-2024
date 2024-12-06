@@ -17,19 +17,15 @@ struct Day2 {
         let startTime = Date.now
 
         let dataset = try await ReportDataset()
-        async let safeReportsCount = dataset.safeReportsCount()
-        async let safeReportsWithProblemDampenerCount =
-            dataset.safeWithProblemDampenerReportsCount()
-
-        let part1 = await safeReportsCount
-        let part2 = await safeReportsWithProblemDampenerCount
+        let safeReportsCount = dataset.safeReportsCount()
+        let safeReportsWithProblemDampenerCount = dataset.safeWithProblemDampenerReportsCount()
 
         let timeTaken = startTime.timeIntervalSinceNow * -1 * 1000
 
         print("Day 2: Red-Nosed Reports")
         print("========================\n")
-        print("Part 1: \(part1)")
-        print("Part 2: \(part2)")
+        print("Part 1: \(safeReportsCount)")
+        print("Part 2: \(safeReportsWithProblemDampenerCount)")
         print("\nTime: \(timeTaken)ms")
     }
 

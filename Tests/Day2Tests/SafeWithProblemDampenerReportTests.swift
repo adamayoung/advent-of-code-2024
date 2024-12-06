@@ -50,14 +50,14 @@ struct SafeWithProblemDampenerReportTests {
 
         let dataset = ReportDataset(reports: reports)
 
-        await #expect(dataset.safeWithProblemDampenerReportsCount() == 4)
+        #expect(dataset.safeWithProblemDampenerReportsCount() == 4)
     }
 
     @Test("safeReportsWithproblemDampenerCount with real input returns correct result")
     func safeReportsWithproblemDampenerCountWithRealInputReturnsCorrectResult() async throws {
         let dataset = try await ReportDataset()
 
-        await #expect(dataset.safeWithProblemDampenerReportsCount() == 271)
+        #expect(dataset.safeWithProblemDampenerReportsCount() == 271)
     }
 
 }

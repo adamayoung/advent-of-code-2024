@@ -24,7 +24,7 @@ final class CalculationProcessor: Sendable {
         try await self.init(fileURL: inputFileURL)
     }
 
-    func sumOfAllMultiplications(withConditionals: Bool = false) async -> Int {
+    func sumOfAllMultiplications(withConditionals: Bool = false) -> Int {
         var result = 0
         var isEnabled = true
         for instruction in instructions {

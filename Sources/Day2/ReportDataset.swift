@@ -24,11 +24,11 @@ final class ReportDataset: Sendable {
         try await self.init(fileURL: inputFileURL)
     }
 
-    func safeReportsCount() async -> Int {
+    func safeReportsCount() -> Int {
         reports.count(where: \.isSafe)
     }
 
-    func safeWithProblemDampenerReportsCount() async -> Int {
+    func safeWithProblemDampenerReportsCount() -> Int {
         reports.count(where: \.isSafeWithProblemDampener)
     }
 

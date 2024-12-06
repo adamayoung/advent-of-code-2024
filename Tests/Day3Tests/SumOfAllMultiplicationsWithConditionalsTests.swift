@@ -18,14 +18,14 @@ struct SumOfAllMultiplicationsWithConditionalsTests {
 
         let processor = CalculationProcessor(data: data)
 
-        await #expect(processor.sumOfAllMultiplications(withConditionals: true) == 48)
+        #expect(processor.sumOfAllMultiplications(withConditionals: true) == 48)
     }
 
     @Test("sumOfAllMultiplicationsWithConditionals with real input returns correct result")
     func sumOfAllMultiplicationsWithConditionalsWithRealInputReturnsCorrectResult() async throws {
         let processor = try await CalculationProcessor()
 
-        await #expect(processor.sumOfAllMultiplications(withConditionals: true) == 89_823_704)
+        #expect(processor.sumOfAllMultiplications(withConditionals: true) == 89_823_704)
     }
 
 }
