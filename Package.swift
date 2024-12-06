@@ -14,7 +14,8 @@ let package = Package(
         .executable(name: "Day3", targets: ["Day3"]),
         .executable(name: "Day4", targets: ["Day4"]),
         .executable(name: "Day5", targets: ["Day5"]),
-        .executable(name: "Day6", targets: ["Day6"])
+        .executable(name: "Day6", targets: ["Day6"]),
+        .executable(name: "Day7", targets: ["Day7"])
     ],
 
     targets: [
@@ -34,6 +35,9 @@ let package = Package(
         .testTarget(name: "Day5Tests", dependencies: ["Day5"]),
 
         .executableTarget(name: "Day6", resources: [.process("Resources")]),
-        .testTarget(name: "Day6Tests", dependencies: ["Day6"])
+        .testTarget(name: "Day6Tests", dependencies: ["Day6"]),
+
+        .executableTarget(name: "Day7", resources: [.process("Resources")]),
+        .testTarget(name: "Day7Tests", dependencies: ["Day7"])
     ]
 )
