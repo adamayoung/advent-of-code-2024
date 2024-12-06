@@ -18,13 +18,14 @@ struct Day6 {
 
         let patrolMap = try await PatrolMap()
         let numberOfDistinctPositionsToLeaveMap = patrolMap.numberOfDistinctPositionsToLeaveMap()
+        let numberOfAddedObstructionsForLoop = await patrolMap.numberOfAddedObstructionsForLoop()
 
         let timeTaken = startTime.timeIntervalSinceNow * -1 * 1000
 
         print("Day 6: Guard Gallivant")
         print("========================\n")
         print("Part 1: \(numberOfDistinctPositionsToLeaveMap)")
-        print("Part 2: ???")
+        print("Part 2: \(numberOfAddedObstructionsForLoop)")
         print("\nTime: \(timeTaken)ms")
     }
 

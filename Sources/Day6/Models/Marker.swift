@@ -25,6 +25,13 @@ enum Marker: Equatable {
         }
     }
 
+    var isEmpty: Bool {
+        switch self {
+        case .empty: return true
+        default: return false
+        }
+    }
+
     var isLabGuard: Bool {
         switch self {
         case .labGuard: return true

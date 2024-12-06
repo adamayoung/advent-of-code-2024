@@ -36,6 +36,9 @@ final class PatrolMap: Sendable {
 
     init(squares: [[Marker]]) {
         self.squares = squares
+        guard guardStartingCoordinate != nil else {
+            fatalError("No guard on map")
+        }
     }
 
     convenience init() async throws {
@@ -48,22 +51,105 @@ final class PatrolMap: Sendable {
     }
 
     func numberOfDistinctPositionsToLeaveMap() -> Int {
+        let count: Int
+        do {
+            let path = try pathLeaveToArea()
+            let distinctCoordinates = Set(path)
+            count = distinctCoordinates.count
+        } catch {
+            return 0
+        }
+
+        return count
+    }
+
+    func numberOfAddedObstructionsForLoop() async -> Int {
+        guard
+            let guardStartingCoordinate = self.guardStartingCoordinate,
+            let guardStartingDirection = self.guardStartingDirection
+        else {
+            fatalError(PathError.noGuard.localizedDescription)
+        }
+        let coordinateInFrontOfGuard: Coordinate = {
+            let coord = guardStartingCoordinate.move(in: guardStartingDirection)
+            guard square(at: coord) != nil else {
+                fatalError()
+            }
+
+            return coord
+        }()
+
+        guard let pathToLeaveMap = try? self.pathLeaveToArea() else {
+            fatalError(PathError.guardStuck.localizedDescription)
+        }
+
+        let pathToLeaveMapSet = Set(pathToLeaveMap)
+
+        let possibleNewObstructionCoordinates = pathToLeaveMapSet.subtracting([
+            guardStartingCoordinate, coordinateInFrontOfGuard
+        ])
+
+        let obstacleCount: Int = await withTaskGroup(of: Int.self) { taskGroup in
+            for coordinate in possibleNewObstructionCoordinates {
+                taskGroup.addTask {
+                    var squares = self.squares
+                    squares[coordinate.row][coordinate.column] = .obstruction
+
+                    let map = PatrolMap(squares: squares)
+
+                    do {
+                        _ = try map.pathLeaveToArea()
+                    } catch let error as PathError {
+                        switch error {
+                        case .infiniteLoop:
+                            return 1
+
+                        case .cantLeaveMap:
+                            return 0
+                        default:
+                            return 0
+                        }
+                    } catch {
+                        return 0
+                    }
+
+                    return 0
+                }
+            }
+
+            return await taskGroup.reduce(into: 0, +=)
+        }
+
+        return obstacleCount
+    }
+
+}
+
+extension PatrolMap {
+
+    private func pathLeaveToArea() throws(PathError) -> [Coordinate] {
         var guardCoordinate = guardStartingCoordinate
         guard guardCoordinate != nil else {
-            return 0
+            throw .noGuard
         }
 
         guard var guardDirection = guardStartingDirection else {
-            return 0
+            throw .noGuardDirection
         }
 
-        var path: Set<Coordinate> = []
+        var path: [Coordinate] = []
+        var seen: [Coordinate: Direction] = [:]
         repeat {
             guard let coordinate = guardCoordinate else {
                 break
             }
 
-            path.insert(coordinate)
+            path.append(coordinate)
+            if seen[coordinate] == guardDirection {
+                throw .infiniteLoop(path)
+            }
+
+            seen[coordinate] = guardDirection
 
             var nextCoordinate = coordinate.move(in: guardDirection)
             var nextSquare = square(at: nextCoordinate)
@@ -108,11 +194,15 @@ final class PatrolMap: Sendable {
                 continue
             }
 
-            break
+            throw .guardStuck
         } while guardCoordinate != nil
 
-        return path.count
+        return path
     }
+
+}
+
+extension PatrolMap {
 
     private func square(at coordinate: Coordinate) -> Marker? {
         guard

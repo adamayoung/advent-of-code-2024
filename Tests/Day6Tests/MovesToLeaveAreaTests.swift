@@ -70,4 +70,101 @@ struct MovesToLeaveAreaTests {
         #expect(patrolMap.numberOfDistinctPositionsToLeaveMap() == 41)
     }
 
+    @Test("numberOfDistinctPositionsToLeaveMap when infinite loop 1 returns zero")
+    func numberOfAddedObstructionsForLoopWhenInfiniteLoop1ReturnsCorrectResult() async {
+        let patrolMap = PatrolMap(
+            squares: [
+                [
+                    .empty, .empty, .empty, .empty, .obstruction, .empty, .empty, .empty, .empty,
+                    .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty,
+                    .obstruction
+                ],
+                [.empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty],
+                [
+                    .empty, .empty, .obstruction, .empty, .empty, .empty, .empty, .empty, .empty,
+                    .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .empty, .obstruction, .empty,
+                    .empty
+                ],
+                [.empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty],
+                [
+                    .empty, .obstruction, .empty, .obstruction, .labGuard(.north), .empty, .empty,
+                    .empty,
+                    .empty, .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .obstruction,
+                    .empty
+                ],
+                [
+                    .obstruction, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty,
+                    .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .obstruction, .empty, .empty,
+                    .empty
+                ]
+            ]
+        )
+
+        #expect(patrolMap.numberOfDistinctPositionsToLeaveMap() == 0)
+    }
+
+    @Test("numberOfDistinctPositionsToLeaveMap when infinite loop 2 returns zero")
+    func numberOfAddedObstructionsForLoopWhenInfiniteLoop2ReturnsCorrectResult() async {
+        let patrolMap = PatrolMap(
+            squares: [
+                [
+                    .empty, .empty, .empty, .empty, .obstruction, .empty, .empty, .empty, .empty,
+                    .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty,
+                    .obstruction
+                ],
+                [.empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty],
+                [
+                    .empty, .empty, .obstruction, .empty, .empty, .empty, .empty, .empty, .empty,
+                    .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .empty, .obstruction, .empty,
+                    .empty
+                ],
+                [.empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty],
+                [
+                    .empty, .obstruction, .empty, .empty, .labGuard(.north), .empty, .empty, .empty,
+                    .empty, .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .obstruction,
+                    .empty
+                ],
+                [
+                    .obstruction, .empty, .empty, .empty, .empty, .empty, .empty, .empty, .empty,
+                    .empty
+                ],
+                [
+                    .empty, .empty, .empty, .empty, .empty, .empty, .obstruction, .obstruction,
+                    .empty,
+                    .empty
+                ]
+            ]
+        )
+
+        #expect(patrolMap.numberOfDistinctPositionsToLeaveMap() == 0)
+    }
+
+    @Test("numberOfDistinctPositionsToLeaveMap with real input returns correct result")
+    func numberOfDistinctPositionsToLeaveMapWithRealInputReturnsCorrectResult() async throws {
+        let patrolMap = try await PatrolMap()
+
+        #expect(patrolMap.numberOfDistinctPositionsToLeaveMap() == 5269)
+    }
+
 }
