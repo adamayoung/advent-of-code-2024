@@ -26,7 +26,7 @@ struct SimilarityScoreTests {
     func similarityScoreWithRealInputReturnsCorrectResult() async throws {
         let dataset = try await LocationDataset()
 
-        await #expect(dataset.similarityScore() == 23655822)
+        await #expect(dataset.similarityScore() == 23_655_822)
     }
 
 }

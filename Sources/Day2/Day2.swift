@@ -18,7 +18,8 @@ struct Day2 {
 
         let dataset = try await ReportDataset()
         async let safeReportsCount = dataset.safeReportsCount()
-        async let safeReportsWithProblemDampenerCount = dataset.safeWithProblemDampenerReportsCount()
+        async let safeReportsWithProblemDampenerCount =
+            dataset.safeWithProblemDampenerReportsCount()
 
         let part1 = await safeReportsCount
         let part2 = await safeReportsWithProblemDampenerCount

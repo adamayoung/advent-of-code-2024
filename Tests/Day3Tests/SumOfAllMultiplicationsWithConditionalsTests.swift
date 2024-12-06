@@ -25,7 +25,7 @@ struct SumOfAllMultiplicationsWithConditionalsTests {
     func sumOfAllMultiplicationsWithConditionalsWithRealInputReturnsCorrectResult() async throws {
         let processor = try await CalculationProcessor()
 
-        await #expect(processor.sumOfAllMultiplications(withConditionals: true) == 89823704)
+        await #expect(processor.sumOfAllMultiplications(withConditionals: true) == 89_823_704)
     }
 
 }

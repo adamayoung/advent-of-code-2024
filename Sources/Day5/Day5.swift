@@ -17,10 +17,12 @@ struct Day5 {
         let startTime = Date.now
 
         let printerInstructions = try await PrinterInstructions()
-        async let sumOfMiddlePagesForCorrectlyOrderedUpdates = printerInstructions
+        async let sumOfMiddlePagesForCorrectlyOrderedUpdates =
+            printerInstructions
             .sumOfMiddlePagesForCorrectlyOrderedUpdates()
 
-        async let sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering = printerInstructions
+        async let sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering =
+            printerInstructions
             .sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering()
 
         let part1 = await sumOfMiddlePagesForCorrectlyOrderedUpdates

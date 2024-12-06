@@ -59,7 +59,8 @@ final class PrinterInstructions: Sendable {
 
     func sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering() async -> Int {
         await withTaskGroup(of: Int.self, returning: Int.self) { taskGroup in
-            for pages in pagesToProduceInUpdates where !self.arePagesToProduceInCorrectOrder(pages) {
+            for pages in pagesToProduceInUpdates where !self.arePagesToProduceInCorrectOrder(pages)
+            {
                 taskGroup.addTask {
                     let orderedPages = self.orderPages(pages)
                     let middlePageIndex = orderedPages.count / 2

@@ -56,7 +56,7 @@ struct TotalDistanceTests {
     func totalDistanceWithRealInputReturnsCorrectResult() async throws {
         let dataset = try await LocationDataset()
 
-        await #expect(dataset.totalDistance() == 2196996)
+        await #expect(dataset.totalDistance() == 2_196_996)
     }
 
 }
