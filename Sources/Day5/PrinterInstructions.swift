@@ -12,6 +12,14 @@ final class PrinterInstructions: Sendable {
     private let pageOrderingRulesLookupTable: [Int: [Int]]
     private let pagesToProduceInUpdates: [[Int]]
 
+    init(
+        pageOrderingRulesLookupTable: [Int: [Int]],
+        pagesToProduceInUpdates: [[Int]]
+    ) {
+        self.pageOrderingRulesLookupTable = pageOrderingRulesLookupTable
+        self.pagesToProduceInUpdates = pagesToProduceInUpdates
+    }
+
     convenience init(
         pageOrderingRules: [(Int, Int)],
         pagesToProduceInUpdates: [[Int]]
@@ -26,12 +34,13 @@ final class PrinterInstructions: Sendable {
         )
     }
 
-    init(
-        pageOrderingRulesLookupTable: [Int: [Int]],
-        pagesToProduceInUpdates: [[Int]]
-    ) {
-        self.pageOrderingRulesLookupTable = pageOrderingRulesLookupTable
-        self.pagesToProduceInUpdates = pagesToProduceInUpdates
+    convenience init() async throws {
+        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
+        else {
+            fatalError("input file missing")
+        }
+
+        try await self.init(fileURL: inputFileURL)
     }
 
     func sumOfMiddlePagesForCorrectlyOrderedUpdates() async -> Int {

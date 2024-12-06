@@ -38,7 +38,7 @@ struct SafeWithProblemDampenerReportTests {
     }
 
     @Test("safeReportsWithproblemDampenerCount when using test data returns correct result")
-    func safeReportsWithProblemDampenerCountWhenUsingTestDataReturnsCorrectResult() {
+    func safeReportsWithProblemDampenerCountWhenUsingTestDataReturnsCorrectResult() async {
         let reports = [
             Report(levels: [7, 6, 4, 2, 1]),
             Report(levels: [1, 2, 7, 8, 9]),
@@ -50,7 +50,14 @@ struct SafeWithProblemDampenerReportTests {
 
         let dataset = ReportDataset(reports: reports)
 
-        #expect(dataset.safeReportsCount(withProblemDampener: true) == 4)
+        await #expect(dataset.safeWithProblemDampenerReportsCount() == 4)
+    }
+
+    @Test("safeReportsWithproblemDampenerCount with real input returns correct result")
+    func safeReportsWithproblemDampenerCountWithRealInputReturnsCorrectResult() async throws {
+        let dataset = try await ReportDataset()
+
+        await #expect(dataset.safeWithProblemDampenerReportsCount() == 271)
     }
 
 }

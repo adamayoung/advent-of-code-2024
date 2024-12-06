@@ -14,36 +14,25 @@ import Foundation
 struct Day5 {
 
     static func main() async throws {
-        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
-        else {
-            fatalError("input file missing")
-        }
+        let startTime = Date.now
 
-        let printerInstructions = try await PrinterInstructions(fileURL: inputFileURL)
-
-        async let sumOfMiddlePagesForCorrectlyOrderedUpdates =
-            printerInstructions
+        let printerInstructions = try await PrinterInstructions()
+        async let sumOfMiddlePagesForCorrectlyOrderedUpdates = printerInstructions
             .sumOfMiddlePagesForCorrectlyOrderedUpdates()
 
-        async let sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering =
-            printerInstructions
+        async let sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering = printerInstructions
             .sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering()
 
-        await printResults(
-            sumOfMiddlePagesForCorrectlyOrderedUpdates: sumOfMiddlePagesForCorrectlyOrderedUpdates,
-            sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering:
-                sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering
-        )
-    }
+        let part1 = await sumOfMiddlePagesForCorrectlyOrderedUpdates
+        let part2 = await sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering
 
-    private static func printResults(
-        sumOfMiddlePagesForCorrectlyOrderedUpdates sumOfUpdates: Int,
-        sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering sumOfIncorrectUpdates: Int
-    ) {
+        let timeTaken = startTime.timeIntervalSinceNow * -1 * 1000
+
         print("Day 5: Print Queue")
         print("========================\n")
-        print("sumOfMiddlePagesForCorrectlyOrderedUpdates: \(sumOfUpdates)")
-        print("sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering: \(sumOfIncorrectUpdates)")
+        print("Part 1: \(part1)")
+        print("Part 2: \(part2)")
+        print("\nTime: \(timeTaken)ms")
     }
 
 }

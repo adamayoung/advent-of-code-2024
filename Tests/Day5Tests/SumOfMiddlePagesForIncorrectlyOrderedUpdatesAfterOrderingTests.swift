@@ -103,11 +103,7 @@ struct SumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrderingTests {
         sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrderingWithRealInputReturnsCorrectResult()
         async throws
     {
-        let inputFileURL = try #require(
-            Bundle.module.url(forResource: "real-input", withExtension: "txt")
-        )
-
-        let printerInstructions = try await PrinterInstructions(fileURL: inputFileURL)
+        let printerInstructions = try await PrinterInstructions()
 
         await #expect(
             printerInstructions.sumOfMiddlePagesForIncorrectlyOrderedUpdatesAfterOrdering() == 6305

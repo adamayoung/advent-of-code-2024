@@ -215,4 +215,11 @@ struct NumberOfXMASOccurencesTests {
         #expect(count == 18)
     }
 
+    @Test("numberOfXMASOccurrences with real input returns correct result")
+    func numberOfXMASOccurrencesWithRealInputReturnsCorrectResult() async throws {
+        let wordsearch = try await Wordsearch()
+
+        await #expect(wordsearch.numberOfXMASOccurrences() == 2562)
+    }
+
 }

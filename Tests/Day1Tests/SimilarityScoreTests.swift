@@ -13,13 +13,20 @@ import Testing
 struct SimilarityScoreTests {
 
     @Test("similarityScore when using test data returns correct result")
-    func similarityScoreWhenUsingTestDataReturnsCorrectResult() {
+    func similarityScoreWhenUsingTestDataReturnsCorrectResult() async {
         let locations1 = [3, 4, 2, 1, 3, 3]
         let locations2 = [4, 3, 5, 3, 9, 3]
 
         let dataset = LocationDataset(locations1: locations1, locations2: locations2)
 
-        #expect(dataset.similarityScore() == 31)
+        await #expect(dataset.similarityScore() == 31)
+    }
+
+    @Test("similarityScore with real input returns correct result")
+    func similarityScoreWithRealInputReturnsCorrectResult() async throws {
+        let dataset = try await LocationDataset()
+
+        await #expect(dataset.similarityScore() == 23655822)
     }
 
 }

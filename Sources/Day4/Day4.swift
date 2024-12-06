@@ -14,29 +14,22 @@ import Foundation
 struct Day4 {
 
     static func main() async throws {
-        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
-        else {
-            fatalError("input file missing")
-        }
+        let startTime = Date.now
 
-        let wordsearch = try await Wordsearch(fileURL: inputFileURL)
+        let wordsearch = try await Wordsearch()
         async let numberOfXmasOccurrences = wordsearch.numberOfXMASOccurrences()
         async let numberOfXxMasOccurrences = wordsearch.numberOfXxMASOccurrences()
 
-        await printResults(
-            numberOfXmasOccurrences: numberOfXmasOccurrences,
-            numberOfXxMasOccurrences: numberOfXxMasOccurrences
-        )
-    }
+        let part1 = await numberOfXmasOccurrences
+        let part2 = await numberOfXxMasOccurrences
 
-    private static func printResults(
-        numberOfXmasOccurrences: Int,
-        numberOfXxMasOccurrences: Int
-    ) {
+        let timeTaken = startTime.timeIntervalSinceNow * -1 * 1000
+
         print("Day 4: Ceres Search")
         print("========================\n")
-        print("numberOfXmasOccurrences: \(numberOfXmasOccurrences)")
-        print("numberOfXxMasOccurrences: \(numberOfXxMasOccurrences)")
+        print("Part 1: \(part1)")
+        print("Part 2: \(part2)")
+        print("\nTime: \(timeTaken)ms")
     }
 
 }

@@ -14,23 +14,22 @@ import Foundation
 struct Day1 {
 
     static func main() async throws {
-        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
-        else {
-            fatalError("input file missing")
-        }
+        let startTime = Date.now
 
-        let dataset = try await LocationDataset(fileURL: inputFileURL)
-        let totalDistance = dataset.totalDistance()
-        let similarityScore = dataset.similarityScore()
+        let dataset = try await LocationDataset()
+        async let totalDistance = dataset.totalDistance()
+        async let similarityScore = dataset.similarityScore()
 
-        printResults(totalDistance: totalDistance, similarityScore: similarityScore)
-    }
+        let part1 = await totalDistance
+        let part2 = await similarityScore
 
-    private static func printResults(totalDistance: Int, similarityScore: Int) {
+        let timeTaken = startTime.timeIntervalSinceNow * -1 * 1000
+
         print("Day 1: Historian Hysteria")
         print("=========================\n")
-        print("Total distance: \(totalDistance)")
-        print("Similarity score: \(similarityScore)")
+        print("Part 1: \(part1)")
+        print("Part 2: \(part2)")
+        print("\nTime: \(timeTaken)ms")
     }
 
 }

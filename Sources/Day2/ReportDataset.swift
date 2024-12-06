@@ -9,29 +9,26 @@ import Foundation
 
 final class ReportDataset: Sendable {
 
-    let reports: [Report]
+    private let reports: [Report]
 
     init(reports: [Report]) {
         self.reports = reports
     }
 
-    func safeReportsCount(withProblemDampener: Bool = false) -> Int {
-        if withProblemDampener {
-            return safeWithProblemDampenerReportsCount()
+    convenience init() async throws {
+        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
+        else {
+            fatalError("input file missing")
         }
 
-        return safeReportsCount()
+        try await self.init(fileURL: inputFileURL)
     }
 
-}
-
-extension ReportDataset {
-
-    private func safeReportsCount() -> Int {
+    func safeReportsCount() async -> Int {
         reports.count(where: \.isSafe)
     }
 
-    private func safeWithProblemDampenerReportsCount() -> Int {
+    func safeWithProblemDampenerReportsCount() async -> Int {
         reports.count(where: \.isSafeWithProblemDampener)
     }
 

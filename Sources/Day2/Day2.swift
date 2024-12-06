@@ -14,32 +14,22 @@ import Foundation
 struct Day2 {
 
     static func main() async throws {
-        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
-        else {
-            fatalError("input file missing")
-        }
+        let startTime = Date.now
 
-        let dataset = try await ReportDataset(fileURL: inputFileURL)
-        let safeReportsCount = dataset.safeReportsCount()
-        let safeReportsWithProblemDampenerCount = dataset.safeReportsCount(
-            withProblemDampener: true)
+        let dataset = try await ReportDataset()
+        async let safeReportsCount = dataset.safeReportsCount()
+        async let safeReportsWithProblemDampenerCount = dataset.safeWithProblemDampenerReportsCount()
 
-        printResults(
-            safeReportsCount: safeReportsCount,
-            safeReportsWithProblemDampenerCount: safeReportsWithProblemDampenerCount
-        )
-    }
+        let part1 = await safeReportsCount
+        let part2 = await safeReportsWithProblemDampenerCount
 
-    private static func printResults(
-        safeReportsCount: Int,
-        safeReportsWithProblemDampenerCount: Int
-    ) {
+        let timeTaken = startTime.timeIntervalSinceNow * -1 * 1000
+
         print("Day 2: Red-Nosed Reports")
         print("========================\n")
-        print("Number of safe reports: \(safeReportsCount)")
-        print(
-            "Number of safe reports with problem dampener: \(safeReportsWithProblemDampenerCount)"
-        )
+        print("Part 1: \(part1)")
+        print("Part 2: \(part2)")
+        print("\nTime: \(timeTaken)ms")
     }
 
 }

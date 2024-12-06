@@ -13,12 +13,19 @@ import Testing
 struct SumOfAllMultiplicationsTests {
 
     @Test("sumOfAllMultiplications when using test data returns correct result")
-    func sumOfAllMultiplicationsWhenUsingTestDataReturnsCorrectResult() {
+    func sumOfAllMultiplicationsWhenUsingTestDataReturnsCorrectResult() async {
         let data = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"
 
         let processor = CalculationProcessor(data: data)
 
-        #expect(processor.sumOfAllMultiplications() == 161)
+        await #expect(processor.sumOfAllMultiplications() == 161)
+    }
+
+    @Test("sumOfAllMultiplications with real input returns correct result")
+    func sumOfAllMultiplicationsWithRealInputReturnsCorrectResult() async throws {
+        let processor = try await CalculationProcessor()
+
+        await #expect(processor.sumOfAllMultiplications() == 167090022)
     }
 
 }

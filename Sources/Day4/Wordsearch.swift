@@ -20,6 +20,20 @@ final class Wordsearch: Sendable {
         self.init(grid: grid)
     }
 
+    convenience init(rows: [String]) {
+        let characterMap = rows.map(Array.init)
+        self.init(characterMap: characterMap)
+    }
+
+    convenience init() async throws {
+        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
+        else {
+            fatalError("input file missing")
+        }
+
+        try await self.init(fileURL: inputFileURL)
+    }
+
     func numberOfXMASOccurrences() async -> Int {
         let wordCoordinatesGroup = await wordCoordinatesGroup(for: "XMAS")
         return wordCoordinatesGroup.count
@@ -84,9 +98,7 @@ final class Wordsearch: Sendable {
 
             var wordCoordinatesGroup: [WordCoordinates] = []
             for await coordinatesGroup in taskGroup {
-                for coordinates in coordinatesGroup {
-                    wordCoordinatesGroup.append(coordinates)
-                }
+                wordCoordinatesGroup.append(contentsOf: coordinatesGroup)
             }
 
             return wordCoordinatesGroup
@@ -114,11 +126,6 @@ extension Wordsearch {
         }
 
         self.init(rows: rows)
-    }
-
-    convenience init(rows: [String]) {
-        let characterMap = rows.map(Array.init)
-        self.init(characterMap: characterMap)
     }
 
 }

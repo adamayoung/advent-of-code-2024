@@ -15,7 +15,16 @@ final class CalculationProcessor: Sendable {
         self.instructions = instructions
     }
 
-    func sumOfAllMultiplications(withConditionals: Bool = false) -> Int {
+    convenience init() async throws {
+        guard let inputFileURL = Bundle.module.url(forResource: "input", withExtension: "txt")
+        else {
+            fatalError("input file missing")
+        }
+
+        try await self.init(fileURL: inputFileURL)
+    }
+
+    func sumOfAllMultiplications(withConditionals: Bool = false) async -> Int {
         var result = 0
         var isEnabled = true
         for instruction in instructions {
